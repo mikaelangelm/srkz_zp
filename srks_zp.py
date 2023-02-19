@@ -44,7 +44,7 @@ def get_message():
         tasks = b24.get_tasks(user["ID"], params)
         params["tasks"] = tasks
         
-        today      = datetime.datetime.today()
+        today      = datetime.datetime.today() if not "Дата" in params else datetime.datetime.strptime(params["Дата"], '%d.%m.%Y')
         last_month = (today - datetime.timedelta(days=29)).replace(day=1)
         month_dict = {'1': 'января', '2': 'февраля', '3': 'марта', '4': 'апреля', '5': 'мая', '6': 'июня', '7': 'июля', '8': 'августа', '9': 'сентябся', 10: 'октября', '11': 'ноября','12': 'декабря'}
     
