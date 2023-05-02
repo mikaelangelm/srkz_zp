@@ -52,7 +52,7 @@ def get_message():
         params = params | {'_ТЗДатаФормат_': f'«01» {month_dict[last_month.month.__str__()]} {last_month.year.__str__()}', '_ТЗДата_': last_month.strftime("%d.%m.%Y"), '_ТЗКонецМесяцаДата_': (today - datetime.timedelta(days=today.day)).strftime("%d.%m.%Y"),
                   '_ФИО_': '{} {} {}'.format(user['LAST_NAME'], user['NAME'], user['SECOND_NAME']), '_ФамилияИО_': '{} {}.{}.'.format(user['LAST_NAME'], user['NAME'][0], user['SECOND_NAME'][0] if len(user['SECOND_NAME']) else '')}
         params["_Итог_"] = str(params["_Итог_"]) + " ("+requests.get(f'https://htmlweb.ru/api/convert/num2str?num={params["_Итог_"]}&noLimit&html&uc=1').text+")"
-        for k,v in {'act': 'https://disk.yandex.ru/i/49uSpSlpp1KGGA', 'contract': 'https://disk.yandex.ru/i/sLtvDNmMycOpkA'}.items():
+        for k,v in {'act': ACT_LINK, 'contract': CONTRACT_LINK}.items():
             doc_link = b24.get_yandex_link(v)
             doc = docx.Document(BytesIO(requests.get(doc_link).content))
             doc = fill_doc(doc, params)
