@@ -47,9 +47,10 @@ def get_message():
         today      = datetime.datetime.today() if not "_ТекущаяДата_" in params else datetime.datetime.strptime(params["_ТекущаяДата_"], '%d.%m.%Y')
         last_month = (today - datetime.timedelta(days=29)).replace(day=1)
         month_dict = {'1': 'января', '2': 'февраля', '3': 'марта', '4': 'апреля', '5': 'мая', '6': 'июня', '7': 'июля', '8': 'августа', '9': 'сентябся', 10: 'октября', '11': 'ноября','12': 'декабря'}
-    
+        _ТЗКонецМесяцаДата_ = (today - datetime.timedelta(days=today.day))
+        
         # Параметры по-умолчанию
-        params = params | {'_ТЗДатаФормат_': f'«01» {month_dict[last_month.month.__str__()]} {last_month.year.__str__()}', '_ТЗДата_': last_month.strftime("%d.%m.%Y"), '_ТЗКонецМесяцаДата_': (today - datetime.timedelta(days=today.day)).strftime("%d.%m.%Y"),
+        params = params | {'_ТЗДата01Формат_': f'«01» {month_dict[last_month.month.__str__()]} {last_month.year.__str__()}', '_ТЗДатаФормат_': f'«{_ТЗКонецМесяцаДата_.strftime("%d")}» {month_dict[last_month.month.__str__()]} {last_month.year.__str__()}', '_ТЗДата_': last_month.strftime("%d.%m.%Y"), '_ТЗКонецМесяцаДата_': (today - datetime.timedelta(days=today.day)).strftime("%d.%m.%Y"),
                   '_ФИО_': '{} {} {}'.format(user['LAST_NAME'], user['NAME'], user['SECOND_NAME']), '_ФамилияИО_': '{} {}.{}.'.format(user['LAST_NAME'], user['NAME'][0], user['SECOND_NAME'][0] if len(user['SECOND_NAME']) else '')}
         params["_Итог_"] = str(params["_Итог_"]) + " ("+requests.get(f'https://htmlweb.ru/api/convert/num2str?num={params["_Итог_"]}&noLimit&html&uc=1').text+")"
         for k,v in {'act': ACT_LINK, 'contract': CONTRACT_LINK}.items():
@@ -129,7 +130,7 @@ def fill_doc(doc, params):
                     run.text = run.text.replace(k, str(v))
      
     # fill table https://python-docx.readthedocs.io/en/latest/api/table.html?highlight=add_row#docx.table._Cell
-    tab = doc.tables[2]
+    tab = doc.tables[1]
     for index,task in params["tasks"].iterrows():
         _row = tab.add_row()
         _row.cells[0].text = str(index+1)
